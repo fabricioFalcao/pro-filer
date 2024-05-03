@@ -1,16 +1,21 @@
+import pytest
 import os
 from datetime import date
 
 from pro_filer.actions.main_actions import show_details  # NOQA
 
 
-def test_with_directory_path(capsys, tmp_path):
+@pytest.fixture(autouse=True)
+def mock_file_path(tmp_path):
     dir_path = tmp_path / "test_dir"
     dir_path.mkdir(parents=True)
     file_path = dir_path / "test.txt"
     file_path.write_text("Chiquinha era mais legal que Pitty.")
+    return dir_path
 
-    path = f"{dir_path}"
+
+def test_with_directory_path(capsys, mock_file_path):
+    path = str(mock_file_path)
     context = {"base_path": path}
 
     show_details(context)
@@ -22,13 +27,8 @@ def test_with_directory_path(capsys, tmp_path):
     )
 
 
-def test_with_file_path(capsys, tmp_path):
-    dir_path = tmp_path / "test_dir"
-    dir_path.mkdir(parents=True)
-    file_path = dir_path / "test.txt"
-    file_path.write_text("Chiquinha era mais legal que Pitty.")
-
-    path = f"{file_path}"
+def test_with_file_path(capsys, mock_file_path):
+    path = f"{mock_file_path}/test.txt"
     context = {"base_path": path}
 
     show_details(context)
@@ -40,13 +40,8 @@ def test_with_file_path(capsys, tmp_path):
     )
 
 
-def test_with_invalid_path(capsys, tmp_path):
-    dir_path = tmp_path / "test_dir"
-    dir_path.mkdir(parents=True)
-    file_path = dir_path / "test.txt"
-    file_path.write_text("Chiquinha era mais legal que Pitty.")
-
-    path = f"{dir_path}/test"
+def test_with_invalid_path(capsys, mock_file_path):
+    path = f"{mock_file_path}/test"
     context = {"base_path": path}
 
     show_details(context)
