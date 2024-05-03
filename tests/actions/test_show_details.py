@@ -5,7 +5,7 @@ from datetime import date
 from pro_filer.actions.main_actions import show_details  # NOQA
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture()
 def mock_file_path(tmp_path):
     dir_path = tmp_path / "test_dir"
     dir_path.mkdir(parents=True)
