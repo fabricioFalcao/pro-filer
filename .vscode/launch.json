@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "Pro filer",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "autoReload": {
+                "enabled": true,
+            },
+            "purpose": [
+                "debug-test"
+            ],
+        }
+    ]
+}
