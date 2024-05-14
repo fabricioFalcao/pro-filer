@@ -33,7 +33,7 @@ def test_show_disk_usage_valid(monkeypatch, capsys, mock_file_path):
 
     for file, size in zip(files, sizes):
         percentage = int(size / total_size * 100)
-        expeted_output += f"'{file}':".ljust(70) + f" {size} ({percentage}%)\n"
+        expeted_output += f"'{file}': {size} ({percentage}%)\n"
 
     expeted_output += f"Total size: {total_size}\n"
 
