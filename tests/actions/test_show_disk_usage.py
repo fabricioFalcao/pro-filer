@@ -1,8 +1,8 @@
 import pytest
 import os
+from unittest.mock import patch
 
 from pro_filer.actions.main_actions import show_disk_usage  # NOQA
-from pro_filer.cli_helpers import _get_printable_file_path
 
 
 @pytest.fixture()
@@ -33,10 +33,7 @@ def test_show_disk_usage_valid(monkeypatch, capsys, mock_file_path):
 
     for file, size in zip(files, sizes):
         percentage = int(size / total_size * 100)
-        expeted_output += (
-            f"'{_get_printable_file_path(file)}':".ljust(70)
-            + f" {size} ({percentage}%)\n"
-        )
+        expeted_output += f"'{file}':".ljust(70) + f" {size} ({percentage}%)\n"
 
     expeted_output += f"Total size: {total_size}\n"
 
@@ -46,11 +43,16 @@ def test_show_disk_usage_valid(monkeypatch, capsys, mock_file_path):
     #     return file_path
 
     # monkeypatch.setattr(
-    #     "pro_filer.cli_helpers._get_printable_file_path",
+    #     "pro_filer.actions.main_actions._get_printable_file_path",
     #     mock_get_printable_file_path,
     # )
 
-    show_disk_usage(context)
+    # show_disk_usage(context)
+
+    with patch(
+        "pro_filer.actions.main_actions._get_printable_file_path", lambda x: x
+    ):
+        show_disk_usage(context)
 
     captured = capsys.readouterr()
     assert captured.out == expeted_output
